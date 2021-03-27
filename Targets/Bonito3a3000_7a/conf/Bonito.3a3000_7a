@@ -71,7 +71,7 @@ option		VGA_BASE=0xbe000000
 option		VRAM_SIZE=128
 #option		DEBUG_EMU_VGA
 option		AUTOLOAD
-option		INITRD_ADDR="0xffffffff89000000"
+option		INITRD_ADDR="0x9800000090000000"
 
 #
 # GPU driver selection. Selects for video

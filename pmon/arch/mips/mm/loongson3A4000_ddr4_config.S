@@ -36,12 +36,21 @@
     dli     t6, 0x00
     bal     inputaddress    #input value stored in v0
     nop
-    dli     t6, 0xc
-    and     v0, v0, t6
-    dli     t6, 0xc
-    not     t6, t6
-    and     s1, s1, t6
-    or      s1, s1, v0
+
+    beq     v0, 0x4, 98f
+    nop
+    beq     v0, 0x8, 97f
+    nop
+    b       99f
+    nop
+
+97: 
+    dli     s1, 0x0 //MC1  only
+    b       99f
+    nop
+98:
+    dli     s3, 0x0 //MC0 only
+99:  
 #endif
 
 #if (SEL_DBL== 1)
