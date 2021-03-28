@@ -1,0 +1,35 @@
+name: PMON Compile CI
+
+ on:
+   push:
+   pull_request:
+
+ jobs:
+   build:
+
+     runs-on: ubuntu-latest
+
+     steps:
+     - uses: actions/checkout@v2
+     - name: install deps
+       run: sudo apt-get install -y flex bison xutils-dev
+     - name: Download toolchain
+       run: wget -O /tmp/gcc-4.4.0-pmon.tgz http://ftp.loongnix.org/toolchain/gcc/release/CROSS_COMPILE/gcc-4.4.0-pmon.tgz
+     - name: Install toolchain
+       run: sudo tar -zxvf /tmp/gcc-4.4.0-pmon.tgz -C /opt/
+
+     - name: Compile and install pmoncfg
+       run: cd tools/pmoncfg && make && sudo cp pmoncfg /opt/gcc-4.4.0-pmon/bin/
+
+     - name: Setup env
+       run: echo "/opt/gcc-4.4.0-pmon/bin" >> $GITHUB_PATH && echo "LD_LIBRARY_PATH=/opt/gcc-4.4.0-pmon/lib" >> $GITHUB_ENV
+
+
+
+     - name: Compile 3a4000_7a
+       run: cd zloader.3a4000_7a && make cfg && make tgt=rom && cd ..
+     - name: Upload 3a4000_7a
+       uses: actions/upload-artifact@v2
+       with:
+         name: pmon-3a4000_7a.bin
+         path: zloader/gzrom.bin
